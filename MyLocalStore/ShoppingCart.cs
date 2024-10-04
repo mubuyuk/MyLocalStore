@@ -8,5 +8,6 @@ namespace MyLocalStore
 {
     internal class ShoppingCart
     {
+
     }
 }
