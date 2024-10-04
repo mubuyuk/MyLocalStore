@@ -12,7 +12,7 @@ namespace MyLocalStore
     internal class Program
     {
         private static List<Customer> customers = new List<Customer>();
-        //Customer knatte = new Customer("Knatte", "123");
+        Customer knatte = new Customer("Knatte", "123");
         //Customer fnatte = new Customer("Fnatte", "321");
         //Customer tjatte = new Customer("Tjatte", "213");
 
