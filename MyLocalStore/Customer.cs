@@ -23,6 +23,8 @@ namespace MyLocalStore
             _cart = new List<Product>();
         }
 
+
+
         public void AddToCart(Product product)
         {
             var choosenProduct = Cart.Find(p => p.Name == product.Name);

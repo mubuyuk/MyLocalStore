@@ -12,14 +12,15 @@ namespace MyLocalStore
     internal class Program
     {
         private static List<Customer> customers = new List<Customer>();
-        Customer knatte = new Customer("Knatte", "123");
-        //Customer fnatte = new Customer("Fnatte", "321");
-        //Customer tjatte = new Customer("Tjatte", "213");
 
-        
-       
         static void Main(string[] args)
         {
+            // 3 st fördefinierade kunder att logga in med.
+            customers.Add(new Customer("Knatte", "123"));
+            customers.Add(new Customer("Fnatte", "321"));
+            customers.Add(new Customer("Tjatte", "213"));
+
+            // Huvudmeny för Affären.
             bool showMenu = true;
             while (showMenu)
             {
@@ -48,11 +49,9 @@ namespace MyLocalStore
                 }
             }
 
-
             //Funktion för att registrera en ny kund.
             static void RegisterCustomer()
             {
-
                 Console.Clear();
                 Console.WriteLine("Vänligen registrera dig");
                 Console.Write("\nVälj ett användarnamn: ");
@@ -60,14 +59,13 @@ namespace MyLocalStore
                 Console.Write("Välj ett lösenord: ");
                 string password = Console.ReadLine();
                 
-                
                 if (customers.Exists(c => c.Name == name)) // Kollar om det redan finns ett inlogg med det namnet.
                 {
                     Console.WriteLine("Kunden finns redan registrerad. Försök igen med ett annat namn.");
                 }
                 else
                 {
-                    customers.Add(new Customer(name, password));
+                    customers.Add(new Customer(name, password)); // Skapar ny kund med valt namn och lösenord.
                     Console.WriteLine("\nNy kund har registrerats! (tryck valfri knapp för att logga in!)");
                     Console.ReadKey();
                     LoginCustomer();
@@ -119,7 +117,7 @@ namespace MyLocalStore
                     ShowCustomerMenu(customer);
                 }
             }
-
+            // Funktionene för menyn efter inlogg.
             static void ShowCustomerMenu(Customer customer)
             {
                 bool loggedIn = true;
@@ -127,7 +125,6 @@ namespace MyLocalStore
                 while (loggedIn)
                 {
                     Console.Clear();
-                    
                     Console.WriteLine($"Välkommen, du är inloggad som {customer.Name}!");
                     Console.WriteLine("\n1. Handla");
                     Console.WriteLine("2. Se kundvagn");
@@ -228,7 +225,7 @@ namespace MyLocalStore
             //    Console.ReadKey();
             //}
 
-
+            // Funktion för kundvagn.
             static void ShowCart(Customer customer)
             {
                 Console.WriteLine("Din kundvagn:\n");
@@ -242,6 +239,7 @@ namespace MyLocalStore
                 Console.ReadKey();
             }
 
+            // Funktion för att avsluta köpet.
             static void Checkout(Customer customer)
             {
                 decimal total = customer.GetCartTotal();
