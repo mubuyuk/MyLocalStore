@@ -35,29 +35,22 @@ namespace MyLocalStore
             while (shopping)
             {
                 Console.Clear();
+                Console.WriteLine(customer.ToString());
                 Console.WriteLine("Tillgängliga produkter:\n");
                 for (int i = 0; i < products.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {products[i].Name} ({products[i].Price} kr)");
                 }
 
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\nKundvagnen innehåller:\n");
-                if (customer.Cart.Count == 0)
-                {
-                    Console.WriteLine("Kundvagnen är tom:\n");
-                }
-                else
-                {
-                    foreach (var product in customer.Cart)
-                    {
-                        Console.WriteLine($"{product.Name} - {product.Amount} st, {product.Price} kr/st\n");
-                    }
-                }
+                Console.ResetColor();
+
+                customer.ShowCartItems();  // Återanvänd den nya funktionen för att visa kundvagnen
 
                 Console.Write("Välj ett alternativ:\n");
                 Console.WriteLine("\n1. Lägg till en produkt");
                 Console.WriteLine("2. Tillbaka till menyn");
-                ;
                 string choice = Console.ReadLine();
 
                 switch (choice)
@@ -69,15 +62,17 @@ namespace MyLocalStore
                         shopping = false;
                         break;
                     default:
-                        Console.WriteLine("Ogiltigt val, försök igen.");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Ogiltigt val.");
+                        Console.ResetColor();
                         break;
-                }
+                }Console.ReadKey();
             }
         }
 
         static void AddProductToCart(Customer customer, List<Product> products)
         {
-
+            
             Console.Write("Välj en produkt att lägga i kundvagnen (ange nummer): ");
             if (int.TryParse(Console.ReadLine(), out int productChoice) && productChoice > 0 && productChoice <= products.Count)
             {
@@ -87,23 +82,12 @@ namespace MyLocalStore
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Ogiltigt val.");
+                Console.ResetColor();
+                Console.ReadKey();
             }
-            Console.ReadKey();
+            
         }
     }
-
-
-
-    //public bool DiscountLevel() // giraffe academy Object Methods | C# | Tutorial 27
-    //{
-    //    if ()
-    //    {
-    //        //implementera 3 nivåer av kund
-    //        return true;
-    //    } 
-    //    return false;
-    //}
-
-
 }

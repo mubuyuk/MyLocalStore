@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyLocalStore
 {
-    internal class ShoppingCart
+    internal class Discount
     {
 
     }

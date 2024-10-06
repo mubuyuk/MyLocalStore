@@ -15,7 +15,8 @@ namespace MyLocalStore
 
         static void Main(string[] args)
         {
-            // 3 st fördefinierade kunder att logga in med.
+
+            // 3 st föridentifierade kunder att logga in med.
             customers.Add(new Customer("Knatte", "123"));
             customers.Add(new Customer("Fnatte", "321"));
             customers.Add(new Customer("Tjatte", "213"));
@@ -43,9 +44,12 @@ namespace MyLocalStore
                         showMenu = false;
                         break;
                     default:
-                        Console.WriteLine("Ogiltigt val, försök igen!");
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Ogiltigt val.");
+                        Console.ResetColor();
                         break;
-
+                        
                 }
             }
 
@@ -83,7 +87,7 @@ namespace MyLocalStore
                 Console.Write("Ange lösenord: ");
                 string password = Console.ReadLine();
                 
-                Customer customer = customers.Find(c => c.Name == name); // Kollar om kunden redan är registrerad.
+                Customer customer = customers.Find(c => c.Name == name); // Kollar om kunden är registrerad.
 
                 if (customer == null)
                 {
@@ -113,7 +117,7 @@ namespace MyLocalStore
                 }
                 else
                 {
-                    Console.WriteLine($"Välkommen {customer.Name}!");
+                    Console.WriteLine($"Välkommen {customer.ToString}!");
                     ShowCustomerMenu(customer);
                 }
             }
@@ -125,7 +129,8 @@ namespace MyLocalStore
                 while (loggedIn)
                 {
                     Console.Clear();
-                    Console.WriteLine($"Välkommen, du är inloggad som {customer.Name}!");
+                    Console.WriteLine("Välkommen");
+                    Console.WriteLine(customer.ToString());
                     Console.WriteLine("\n1. Handla");
                     Console.WriteLine("2. Se kundvagn");
                     Console.WriteLine("3. Gå till kassan");
@@ -148,95 +153,25 @@ namespace MyLocalStore
                             loggedIn = false;
                             break;
                         default:
-                            Console.WriteLine("Ogiltigt val, försök igen.");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Ogiltigt val.");
+                            Console.ResetColor();
                             break;
                     }
+                    Console.ReadKey();
                 }
             }
 
-            //static void Shop(Customer customer)
-            //{
-            //    List<Product> products = new List<Product>
-            //{
-            //    new Product("Korv", 25m),
-            //    new Product("Dricka", 15m),
-            //    new Product("Äpple", 5m)
-            //};
-
-            //    bool shopping = true;
-
-            //    while (shopping)
-            //    {
-            //        Console.Clear();
-            //        Console.WriteLine("Tillgängliga produkter:\n");
-            //        for (int i = 0; i < products.Count; i++)
-            //        {
-            //            Console.WriteLine($"{i + 1}. {products[i].Name} ({products[i].Price} kr)");
-            //        }
-
-            //        Console.WriteLine("\nKundvagnen innehåller:\n");
-            //        if (customer.Cart.Count == 0)
-            //        {
-            //            Console.WriteLine("Kundvagnen är tom:\n");
-            //        }
-            //        else
-            //        {
-            //            foreach (var product in customer.Cart)
-            //            {
-            //                Console.WriteLine($"{product.Name} - {product.Amount} st, {product.Price} kr/st\n");
-            //            }
-            //        }
-
-            //        Console.Write("Välj ett alternativ:\n");
-            //        Console.WriteLine("\n1. Lägg till en produkt");
-            //        Console.WriteLine("2. Tillbaka till menyn");
-            //        ;
-            //        string choice = Console.ReadLine();
-
-            //        switch (choice)
-            //        {
-            //            case "1":
-            //                AddProductToCart(customer, products);
-            //                break;
-            //            case "2":
-            //                shopping = false;
-            //                break;
-            //            default:
-            //                Console.WriteLine("Ogiltigt val, försök igen.");
-            //                break;
-            //        }
-            //    }
-            //}
-
-            //static void AddProductToCart(Customer customer, List<Product> products)
-            //{
-
-            //    Console.Write("Välj en produkt att lägga i kundvagnen (ange nummer): ");
-            //    if (int.TryParse(Console.ReadLine(), out int productChoice) && productChoice > 0 && productChoice <= products.Count)
-            //    {
-            //        Product selectedProduct = products[productChoice - 1];
-            //        customer.AddToCart(selectedProduct);
-            //        Console.WriteLine($"{selectedProduct.Name} lades till i kundvagnen.");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Ogiltigt val.");
-            //    }
-            //    Console.ReadKey();
-            //}
-
-            // Funktion för kundvagn.
             static void ShowCart(Customer customer)
             {
+                Console.Clear();  // Rensar konsolen för att hålla det snyggt
+                Console.WriteLine(customer.ToString());  // Visa kundens namn och lösenord
                 Console.WriteLine("Din kundvagn:\n");
-                foreach (var product in customer.Cart)
-                {
-                    Console.WriteLine($"{product.Name} - {product.Amount} st, {product.Price} kr/st");
-                }
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nTotalpris: {customer.GetCartTotal()} kr");
-                Console.ResetColor();
-                Console.ReadKey();
+
+                customer.ShowCartItems();  // Använder funktionen för att visa kundvagnen
+
+                Console.WriteLine("Tryck valfri knapp för att gå tillbaka...");
+                
             }
 
             // Funktion för att avsluta köpet.
@@ -245,16 +180,22 @@ namespace MyLocalStore
                 decimal total = customer.GetCartTotal();
                 if (total == 0)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Din kundvagn är tom.");
+                    Console.ResetColor();
                 }
                 else
-                {
-                    Console.WriteLine($"Totalt att betala: \n{total} kr. \nTack för ditt köp!");
+                {   Console.Clear();
+
+                    //Console.WriteLine($"Kundnivå: {customer.CustomerLevel}"); // Visa kundnivån
+                    Console.WriteLine("Din kund korg innehåller: ");
+                    customer.ShowCartItems();
+                    Console.WriteLine("Tack för ditt köp!");
                     customer.Cart.Clear(); // Töm kundvagnen efter betalning
+                    Console.WriteLine("Tryck valfi knapp för att återgå till menyn");
                     Console.ReadKey();
                 }
             }
-
         }
     }
 }

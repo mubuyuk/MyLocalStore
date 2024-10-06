@@ -13,6 +13,7 @@ namespace MyLocalStore
         public string Password { get; private set; }
         private List<Product> _cart;
         public List<Product> Cart { get { return _cart;} }
+        public string CustomerLevel { get; set; }
 
 
         // Constructor med  parametrar, har samma naman som classen, har ingen returtyp
@@ -22,8 +23,6 @@ namespace MyLocalStore
             Password = password;
             _cart = new List<Product>();
         }
-
-
 
         public void AddToCart(Product product)
         {
@@ -38,6 +37,30 @@ namespace MyLocalStore
             }
         }
 
+        // Metod för att visa kundvagnen
+        public void ShowCartItems()
+        {
+            if (Cart.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Din kundvagn är tom.");
+                Console.ResetColor();
+            }
+            else
+            {
+                foreach (var product in Cart)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{product.Name} - {product.Amount} st, {product.Price} kr/st");
+                    Console.ResetColor();
+                }
+                decimal total = GetCartTotal();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nTotalpris: {total} kr");
+                Console.ResetColor();
+            }
+        }
+
         public decimal GetCartTotal()
         {
             decimal total = 0;
@@ -45,7 +68,13 @@ namespace MyLocalStore
             {
                 total += product.Price * product.Amount;
             }
+
             return total;
+        }
+
+        public override string ToString()
+        {
+            return $"Kund: {Name}, Lösenord: {Password}";
         }
     }
 }
