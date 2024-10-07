@@ -13,13 +13,13 @@ namespace MyLocalStore
         public string Password { get; private set; }
         private List<Product> _cart;
         public List<Product> Cart { get { return _cart;} }
-        
 
 
-        // Constructor med  parametrar, har samma naman som classen, har ingen returtyp
+
+        // Konstruktor för att skapa ett Customer-objekt och tilldela initiala värden.
         public Customer(string name, string password)
         {
-            Name = name;                // Tilldela parametrarna till fällten (Fields)
+            Name = name;                // Tilldelar parametern 'name' till egenskapen 'Name'
             Password = password;
             _cart = new List<Product>();
             

@@ -10,6 +10,7 @@ namespace MyLocalStore
     {
         public class GoldCustomer : Customer // Subklass som ärver från basklassen Customer
         {
+            // Konstruktor för GoldCustomer som tar in namn och lösenord, och skickar vidare dessa till basklassen (Customer)
             public GoldCustomer(string name, string password) : base(name, password)
             {
             }

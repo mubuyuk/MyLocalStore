@@ -56,28 +56,55 @@ namespace MyLocalStore
                 }
             }
 
-            //Funktion för att registrera en ny kund.
             static void RegisterCustomer()
             {
                 Console.Clear();
                 Console.WriteLine("Vänligen registrera dig");
-                Console.Write("\nVälj ett användarnamn: ");
-                string name = Console.ReadLine();
-                Console.Write("Välj ett lösenord: ");
-                string password = Console.ReadLine();
-                
-                if (customers.Exists(c => c.Name == name)) // Kollar om det redan finns ett inlogg med det namnet.
+
+                string name;
+                string password;
+
+                // Kontrollera att användarnamnet inte är tomt och inte redan existerar.
+                do
                 {
-                    Console.WriteLine("Kunden finns redan registrerad. Försök igen med ett annat namn.");
-                }
-                else
+                    Console.Write("\nVälj ett användarnamn: ");
+                    name = Console.ReadLine();
+
+                    // Kontrollera om användarnamnet är tomt.
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Användarnamn kan inte vara tomt. Försök igen.");
+                        Console.ResetColor();
+                    }
+                    // Kontrollera om användarnamnet redan existerar.
+                    else if (customers.Exists(c => c.Name == name))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Användarnamnet är redan registrerat. Försök igen med ett annat namn.");
+                        Console.ResetColor();
+                        name = ""; // Återställ namnet för att fortsätta loopen.
+                    }
+                } while (string.IsNullOrWhiteSpace(name));  // Fortsätt fråga tills ett giltigt och unikt namn anges.
+
+                // Kontrollera att lösenordet inte är tomt.
+                do
                 {
-                    customers.Add(new Customer(name, password)); // Skapar ny kund med valt namn och lösenord.
-                    Console.WriteLine("\nNy kund har registrerats! (tryck valfri knapp för att logga in!)");
-                    Console.ReadKey();
-                    LoginCustomer();
-                    return;
-                }
+                    Console.Write("Välj ett lösenord: ");
+                    password = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(password))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Lösenord kan inte vara tomt. Försök igen.");
+                        Console.ResetColor();
+                    }
+                } while (string.IsNullOrWhiteSpace(password));  // Fortsätt fråga tills ett giltigt lösenord anges.
+
+                // Skapa och lägg till den nya kunden om både namn och lösenord är giltiga och unika.
+                customers.Add(new Customer(name, password));
+                Console.WriteLine("\nNy kund har registrerats! (tryck valfri knapp för att logga in!)");
+                Console.ReadKey();
+                LoginCustomer();  // Fortsätt med inloggningen efter registreringen.
             }
 
             //Funktion för att loggga in kunden.
