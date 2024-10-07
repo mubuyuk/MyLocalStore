@@ -35,7 +35,9 @@ namespace MyLocalStore
             while (shopping)
             {
                 Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine(customer.ToString());
+                Console.ResetColor();
                 Console.WriteLine("Tillgängliga produkter:\n");
                 for (int i = 0; i < products.Count; i++)
                 {
@@ -46,7 +48,7 @@ namespace MyLocalStore
                 Console.WriteLine("\nKundvagnen innehåller:\n");
                 Console.ResetColor();
 
-                customer.ShowCartItems();  // Återanvänd den nya funktionen för att visa kundvagnen
+                customer.ShowCartItems();  // funktionen för att visa kundvagnen
 
                 Console.Write("Välj ett alternativ:\n");
                 Console.WriteLine("\n1. Lägg till en produkt");
@@ -65,9 +67,10 @@ namespace MyLocalStore
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Ogiltigt val.");
                         Console.ResetColor();
+                        //Console.ReadKey();
                         break;
-                }Console.ReadKey();
-            }
+                }       //Console.ReadKey();
+            } //Console.ReadKey();
         }
 
         static void AddProductToCart(Customer customer, List<Product> products)
@@ -87,7 +90,6 @@ namespace MyLocalStore
                 Console.ResetColor();
                 Console.ReadKey();
             }
-            
         }
     }
 }

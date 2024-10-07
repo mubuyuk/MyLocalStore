@@ -13,7 +13,7 @@ namespace MyLocalStore
         public string Password { get; private set; }
         private List<Product> _cart;
         public List<Product> Cart { get { return _cart;} }
-        public string CustomerLevel { get; set; }
+        
 
 
         // Constructor med  parametrar, har samma naman som classen, har ingen returtyp
@@ -22,6 +22,7 @@ namespace MyLocalStore
             Name = name;                // Tilldela parametrarna till fällten (Fields)
             Password = password;
             _cart = new List<Product>();
+            
         }
 
         public void AddToCart(Product product)
@@ -55,9 +56,9 @@ namespace MyLocalStore
                     Console.ResetColor();
                 }
                 decimal total = GetCartTotal();
-                Console.ForegroundColor = ConsoleColor.Green;
+                
                 Console.WriteLine($"\nTotalpris: {total} kr");
-                Console.ResetColor();
+                
             }
         }
 
@@ -72,9 +73,39 @@ namespace MyLocalStore
             return total;
         }
 
+        // Uppdaterar kundnivån baserat på hur mycket kunden har spenderat
+        public string GetCustomerLevel(decimal currentTotal)
+        {
+            if (currentTotal >= 100) return "Gold - 15% rabatt";
+            if (currentTotal >= 50) return "Silver - 10% rabatt";
+            return "Bronze - 5% rabatt";
+        }
+
+        // räkna ut rabatten baserat på kundnivån (Gold, Silver eller Bronze) beroende på totalbeloppet.
+        public virtual decimal CalculateDiscount(decimal total)
+        {
+            string level = GetCustomerLevel(total);
+            decimal discount = 0;
+
+            switch (level)
+            {
+                case "Gold - 15% rabatt":
+                    discount = total * 0.15m; // 15% rabatt för Gold
+                    break;
+                case "Silver - 10% rabatt":
+                    discount = total * 0.10m; // 10% rabatt för Silver
+                    break;
+                case "Bronze - 5% rabatt":
+                    discount = total * 0.05m; // 5% rabatt för Bronze
+                    break;
+            }
+
+            return discount;
+        }
+
         public override string ToString()
         {
-            return $"Kund: {Name}, Lösenord: {Password}";
+            return $"Kund: {Name}, Lösenord: {Password}, ";
         }
     }
 }
