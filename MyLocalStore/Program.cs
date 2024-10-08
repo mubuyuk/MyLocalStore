@@ -52,10 +52,8 @@ namespace MyLocalStore
                         showMenu = false;
                         break;
                     default:
-                        
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Ogiltigt val.");
-                        Console.ResetColor();
+                        // Anropa hjälpfunktionen vid ogiltig inmatning
+                        Helper.ShowInvalidInputMessage();
                         Console.ReadKey();
                         break;
                         
@@ -272,9 +270,8 @@ namespace MyLocalStore
                             loggedIn = false;
                             break;
                         default:
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Ogiltigt val.");
-                            Console.ResetColor();
+                            // Anropa hjälpfunktionen vid ogiltig inmatning
+                            Helper.ShowInvalidInputMessage();
                             break;
                             
                     }

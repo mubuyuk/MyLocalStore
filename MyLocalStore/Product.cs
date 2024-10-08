@@ -15,10 +15,6 @@ namespace MyLocalStore
         public decimal Price { get; set; }
         public int Amount { get; set; }
 
-        // Valutakurser
-        //public decimal USDConversionRate = 0.11m; // Exempel: 1 SEK = 0.10 USD
-        //public decimal GBPConversionRate = 0.095m; // Exempel: 1 SEK = 0.075 GBP
-
         public Product(string name, decimal price)  // Konstruktor för att skapa produkt med namn och pris.
         {
             Name = name;
@@ -109,9 +105,9 @@ namespace MyLocalStore
                         shopping = false;       // Avsluta shoppingloopen.
                         break;
                     default:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Ogiltigt val.");  // Felmeddelande om användaren gör ett ogiltigt val.
-                        Console.ResetColor();
+                        // Anropa hjälpfunktionen vid ogiltig inmatning
+                        Helper.ShowInvalidInputMessage();
+                        Console.ReadKey();
                         break;
                 }
             }
@@ -134,10 +130,8 @@ namespace MyLocalStore
             }
             else
             {
-                // Om användaren gjort ett ogiltigt val, visa ett felmeddelande.
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ogiltigt val.");
-                Console.ResetColor();
+                // Anropa hjälpfunktionen vid ogiltig inmatning
+                Helper.ShowInvalidInputMessage();
                 Console.ReadKey();
             }
         }
