@@ -18,9 +18,14 @@ namespace MyLocalStore
             // Överskrid metoden för att ge 15% rabatt
             public override decimal CalculateDiscount(decimal total)
             {
-
                 return total * 0.15m;
+            }
 
+            public override string ToString()
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                return $"Kund: {Name} Kundnivå: [Gold] 15% rabatt!";
+                
             }
         }
 
@@ -35,6 +40,12 @@ namespace MyLocalStore
             {
                 return total * 0.10m;
             }
+
+            public override string ToString()
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                return $"Kund: {Name} Kundnivå: [Silver] 10% rabatt!";
+            }
         }
 
         public class BronzeCustomer : Customer
@@ -47,6 +58,12 @@ namespace MyLocalStore
             public override decimal CalculateDiscount(decimal total)
             {
                 return total * 0.05m;
+            }
+
+            public override string ToString()
+            {
+                
+                return $"Kund: {Name} Kundnivå: [Bronze] 5% rabatt!";
             }
         }
     }

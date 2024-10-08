@@ -18,9 +18,9 @@ namespace MyLocalStore
         {
 
             // 3 st föridentifierade kunder att logga in med.
-            customers.Add(new Customer("Knatte", "123"));
-            customers.Add(new Customer("Fnatte", "321"));
-            customers.Add(new Customer("Tjatte", "213"));
+            customers.Add(new GoldCustomer("Knatte", "123"));   // Gold-kund (15% rabatt)
+            customers.Add(new SilverCustomer("Fnatte", "321")); // Silver-kund (10% rabatt)
+            customers.Add(new BronzeCustomer("Tjatte", "213")); // Bronze-kund (5% rabatt)
 
             // Huvudmeny för Affären.
             bool showMenu = true;
@@ -76,6 +76,7 @@ namespace MyLocalStore
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Användarnamn kan inte vara tomt. Försök igen.");
                         Console.ResetColor();
+                        
                     }
                     // Kontrollera om användarnamnet redan existerar.
                     else if (customers.Exists(c => c.Name == name))
@@ -97,6 +98,7 @@ namespace MyLocalStore
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Lösenord kan inte vara tomt. Försök igen.");
                         Console.ResetColor();
+                        
                     }
                 } while (string.IsNullOrWhiteSpace(password));  // Fortsätt fråga tills ett giltigt lösenord anges.
 
@@ -159,7 +161,6 @@ namespace MyLocalStore
                 while (loggedIn)
                 {
                     Console.Clear();
-                    Console.WriteLine("Välkommen");
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine(customer.ToString());
                     Console.ResetColor();
@@ -197,16 +198,15 @@ namespace MyLocalStore
 
             static void ShowCart(Customer customer)
             {
-                Console.Clear();  // Rensar konsolen för att hålla det snyggt
+                Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine(customer.ToString());  // Visa kundens inloggningsuppgifter.
-                Console.ResetColor();                       
+                Console.WriteLine(customer.ToString());
+                Console.ResetColor();
                 Console.WriteLine("Din kundvagn:\n");
 
-                customer.ShowCartItems();  // Använder funktionen för att visa kundvagnen
+                customer.ShowCartItems();
 
                 Console.WriteLine("Tryck valfri knapp för att gå tillbaka...");
-                
             }
 
             // Funktion för att avsluta köpet.
@@ -222,26 +222,26 @@ namespace MyLocalStore
                 else
                 {
                     Console.Clear();
-                    string customerLevel = customer.GetCustomerLevel(total); //hämtar nivån (Gold, Silver, Bronze) baserat på totalen för köpet.
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine(customer.ToString());
                     Console.ResetColor();
 
                     Console.WriteLine("Din Kundvagn: ");
-                    decimal discount = customer.CalculateDiscount(total); // Beräkna rabatt baserat på kundnivå
+                    customer.ShowCartItems();
+
+                    decimal discount = customer.CalculateDiscount(total); // Använder den fasta rabatten för varje kundtyp
                     decimal totalAfterDiscount = total - discount;
 
-                    customer.ShowCartItems();
-                    Console.WriteLine($"Kundnivå: {customerLevel}"); // skriver ut vilken nivå kunden befinner sig på i samband med köpet.
                     Console.WriteLine($"Rabatt: {discount} kr");
-                    Console.ForegroundColor= ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Totalpris efter rabatt: {totalAfterDiscount} kr");
                     Console.ResetColor();
-                    
-                    customer.Cart.Clear(); // Töm kundvagnen efter betalning
+
+                    customer.Cart.Clear();
                     Console.WriteLine("\nTack för ditt köp!");
                     Console.ReadKey();
                 }
+
             }
         }
     }
