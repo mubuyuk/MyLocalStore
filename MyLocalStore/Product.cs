@@ -16,8 +16,8 @@ namespace MyLocalStore
         public int Amount { get; set; }
 
         // Valutakurser
-        public decimal USDConversionRate = 0.11m; // Exempel: 1 SEK = 0.10 USD
-        public decimal GBPConversionRate = 0.095m; // Exempel: 1 SEK = 0.075 GBP
+        //public decimal USDConversionRate = 0.11m; // Exempel: 1 SEK = 0.10 USD
+        //public decimal GBPConversionRate = 0.095m; // Exempel: 1 SEK = 0.075 GBP
 
         public Product(string name, decimal price)  // Konstruktor för att skapa produkt med namn och pris.
         {
@@ -29,7 +29,8 @@ namespace MyLocalStore
         // Metod för att konvertera priset till en annan valuta
         public decimal GetPriceInCurrency(string currency)
         {
-            bool choise = true;
+            decimal USDConversionRate = 0.11m;
+            decimal GBPConversionRate = 0.095m;
 
             switch (currency)
             {

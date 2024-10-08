@@ -21,10 +21,10 @@ namespace MyLocalStore
             // Ladda in kunder från filen vid programmets start
             LoadCustomersFromFile(filePath);
 
-            // 3 st föridentifierade kunder att logga in med.// behövs inte länge då dom är sparade i customers.txt filen
-            //customers.Add(new GoldCustomer("Knatte", "123"));   // Gold-kund (15% rabatt)
-            //customers.Add(new SilverCustomer("Fnatte", "321")); // Silver-kund (10% rabatt)
-            //customers.Add(new BronzeCustomer("Tjatte", "213")); // Bronze-kund (5% rabatt)
+            // 3 st föridentifierade kunder att logga in med
+            customers.Add(new GoldCustomer("Knatte", "123"));   // Gold-kund (15% rabatt)
+            customers.Add(new SilverCustomer("Fnatte", "321")); // Silver-kund (10% rabatt)
+            customers.Add(new BronzeCustomer("Tjatte", "213")); // Bronze-kund (5% rabatt)
 
             // Huvudmeny för Affären.
             bool showMenu = true;
@@ -70,7 +70,7 @@ namespace MyLocalStore
                     // Loopar genom alla kunder.
                     foreach (var customer in customers)
                     {
-                        // Sparar varje kund med formatet: Namn, Lösenord, Kundtyp
+                        // Sparar varje kund med: Namn, Lösenord, Kundtyp
                         writer.WriteLine($"{customer.Name},{customer.Password},{customer.GetType().Name}");
                     }
                 }
@@ -312,11 +312,11 @@ namespace MyLocalStore
                 {
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(customer.ToString());
+                    Console.WriteLine(customer.ToString());  // visar info om kunden
                     Console.ResetColor();
 
                     Console.WriteLine("Din Kundvagn: ");
-                    customer.ShowCartItems();
+                    customer.ShowCartItems(); // metod som visar alla produkter i kundvagnen
 
                     // Räknar ut och visar rabatt.
                     decimal discount = customer.CalculateDiscount(total); // Använder den fasta rabatten för varje kundtyp
