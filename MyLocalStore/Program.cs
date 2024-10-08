@@ -12,15 +12,19 @@ namespace MyLocalStore
 {
     internal class Program
     {
+        // Lista över registrerade kunder.
         private static List<Customer> customers = new List<Customer>();
-
+        private static string filePath = "customers.txt";  // Filens sökväg till textfilen där kunderna sparas.
+        
         static void Main(string[] args)
         {
+            // Ladda in kunder från filen vid programmets start
+            LoadCustomersFromFile(filePath);
 
-            // 3 st föridentifierade kunder att logga in med.
-            customers.Add(new GoldCustomer("Knatte", "123"));   // Gold-kund (15% rabatt)
-            customers.Add(new SilverCustomer("Fnatte", "321")); // Silver-kund (10% rabatt)
-            customers.Add(new BronzeCustomer("Tjatte", "213")); // Bronze-kund (5% rabatt)
+            // 3 st föridentifierade kunder att logga in med.// behövs inte länge då dom är sparade i customers.txt filen
+            //customers.Add(new GoldCustomer("Knatte", "123"));   // Gold-kund (15% rabatt)
+            //customers.Add(new SilverCustomer("Fnatte", "321")); // Silver-kund (10% rabatt)
+            //customers.Add(new BronzeCustomer("Tjatte", "213")); // Bronze-kund (5% rabatt)
 
             // Huvudmeny för Affären.
             bool showMenu = true;
@@ -37,12 +41,14 @@ namespace MyLocalStore
                 switch (menuChoise)
                 {
                     case "1":
-                        LoginCustomer();
+                        LoginCustomer(); 
                         break;
                     case "2":
                         RegisterCustomer();
                         break;
                     case "3":
+                        // Spara kunder till filen när programmet avslutas
+                        SaveCustomersToFile(filePath);
                         showMenu = false;
                         break;
                     default:
@@ -56,6 +62,61 @@ namespace MyLocalStore
                 }
             }
 
+            // Funktionen för att spara alla kunder till textfil
+            static void SaveCustomersToFile(string filePath)
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    // Loopar genom alla kunder.
+                    foreach (var customer in customers)
+                    {
+                        // Sparar varje kund med formatet: Namn, Lösenord, Kundtyp
+                        writer.WriteLine($"{customer.Name},{customer.Password},{customer.GetType().Name}");
+                    }
+                }
+            }
+
+            // Funktionen för att läsa in alla kunder från textfil
+            static void LoadCustomersFromFile(string filePath)
+            {
+                if (File.Exists(filePath))  // Kontrollera att filen finns
+                {
+                    // Använder en StreamWriter för att skriva till filen
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        // Läser varje rad från textfilen och skapar kunder baserat på data
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            string[] data = line.Split(',');  // Dela upp varje rad med komma
+                            string name = data[0];
+                            string password = data[1];
+                            string type = data[2];
+
+                            // Skapa rätt kundtyp beroende på vad som står i filen (Gold, Silver, Bronze)
+                            Customer customer;
+                            switch (type)
+                            {
+                                case "GoldCustomer":
+                                    customer = new GoldCustomer(name, password);
+                                    break;
+                                case "SilverCustomer":
+                                    customer = new SilverCustomer(name, password);
+                                    break;
+                                case "BronzeCustomer":
+                                    customer = new BronzeCustomer(name, password);
+                                    break;
+                                default:
+                                    customer = new Customer(name, password);  // Standardkund om något går fel
+                                    break;
+                            }
+                            customers.Add(customer);  // Lägg till kunden i listan
+                        }
+                    }
+                }
+            }
+
+            // Funktion för att registrera en ny kund
             static void RegisterCustomer()
             {
                 Console.Clear();
@@ -102,11 +163,34 @@ namespace MyLocalStore
                     }
                 } while (string.IsNullOrWhiteSpace(password));  // Fortsätt fråga tills ett giltigt lösenord anges.
 
-                // Skapa och lägg till den nya kunden om både namn och lösenord är giltiga och unika.
-                customers.Add(new Customer(name, password));
-                Console.WriteLine("\nNy kund har registrerats! (tryck valfri knapp för att logga in!)");
+                // Låt användaren välja kundnivå (Gold, Silver, Bronze)
+                Console.WriteLine("Välj kundnivå (1: Gold, 2: Silver, 3: Bronze): ");
+                string levelChoice = Console.ReadLine();
+                Customer newCustomer;
+
+                // Skapar rätt kundtyp beroende på användarens val
+                switch (levelChoice)
+                {
+                    case "1":
+                        newCustomer = new GoldCustomer(name, password);
+                        break;
+                    case "2":
+                        newCustomer = new SilverCustomer(name, password);
+                        break;
+                    case "3":
+                        newCustomer = new BronzeCustomer(name, password);
+                        break;
+                    default:
+                        newCustomer = new Customer(name, password);  // Default om valet inte är korrekt
+                        break;
+                }
+
+                customers.Add(newCustomer);  // Lägg till den nya kunden i listan
+                Console.WriteLine("\nNy kund har registrerats!");
+
+                // Spara alla kunder till textfilen efter registrering
+                SaveCustomersToFile(filePath);
                 Console.ReadKey();
-                LoginCustomer();  // Fortsätt med inloggningen efter registreringen.
             }
 
             //Funktion för att loggga in kunden.
@@ -123,6 +207,7 @@ namespace MyLocalStore
 
                 if (customer == null)
                 {
+                    // Om kunden inte hittas, fråga om användaren vill registrera sig
                     Console.WriteLine("Kunden finns inte. Vill du registrera en ny kund? (J/N): ");
                     string answer = Console.ReadLine();
                     if (answer.ToUpperInvariant() == "J")
@@ -137,6 +222,7 @@ namespace MyLocalStore
                     Console.WriteLine("2. Registrera dig");
                     string choise = Console.ReadLine();
 
+                    // Hantera användarens val vid felaktigt lösenord
                     switch (choise)
                     {
                         case "1":
@@ -150,7 +236,7 @@ namespace MyLocalStore
                 else
                 {
                     Console.WriteLine($"Välkommen {customer.ToString}!");
-                    ShowCustomerMenu(customer);
+                    ShowCustomerMenu(customer); // Skickar kunden vidare till menyn efter lyckad inlogg.
                 }
             }
             // Funktionene för menyn efter inlogg.
@@ -196,6 +282,7 @@ namespace MyLocalStore
                 }
             }
 
+            // Funktion för att visa kundvagnen.
             static void ShowCart(Customer customer)
             {
                 Console.Clear();
@@ -204,7 +291,7 @@ namespace MyLocalStore
                 Console.ResetColor();
                 Console.WriteLine("Din kundvagn:\n");
 
-                customer.ShowCartItems();
+                customer.ShowCartItems(); // metod som visar alla produkter i kundvagnen.
 
                 Console.WriteLine("Tryck valfri knapp för att gå tillbaka...");
             }
@@ -212,9 +299,11 @@ namespace MyLocalStore
             // Funktion för att avsluta köpet.
             static void Checkout(Customer customer)
             {
+                //Hämtar totalbelopp från kundens kundvagn.
                 decimal total = customer.GetCartTotal();
                 if (total == 0)
                 {
+                    // Meddelande om kundvagnene är tom.
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Din kundvagn är tom.");
                     Console.ResetColor();
@@ -229,6 +318,7 @@ namespace MyLocalStore
                     Console.WriteLine("Din Kundvagn: ");
                     customer.ShowCartItems();
 
+                    // Räknar ut och visar rabatt.
                     decimal discount = customer.CalculateDiscount(total); // Använder den fasta rabatten för varje kundtyp
                     decimal totalAfterDiscount = total - discount;
 
@@ -237,11 +327,12 @@ namespace MyLocalStore
                     Console.WriteLine($"Totalpris efter rabatt: {totalAfterDiscount} kr");
                     Console.ResetColor();
 
+                    //Tömmer kundvagnene efter köp.
                     customer.Cart.Clear();
                     Console.WriteLine("\nTack för ditt köp!");
+                    Console.WriteLine("Tryck valfri knapp för att återgå..");
                     Console.ReadKey();
                 }
-
             }
         }
     }

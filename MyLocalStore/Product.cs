@@ -16,8 +16,8 @@ namespace MyLocalStore
         public int Amount { get; set; }
 
         // Valutakurser
-        private static readonly decimal USDConversionRate = 0.11m; // Exempel: 1 SEK = 0.11 USD
-        private static readonly decimal EURConversionRate = 0.095m; // Exempel: 1 SEK = 0.095 EUR
+        public decimal USDConversionRate = 0.11m; // Exempel: 1 SEK = 0.10 USD
+        public decimal GBPConversionRate = 0.095m; // Exempel: 1 SEK = 0.075 GBP
 
         public Product(string name, decimal price)  // Konstruktor för att skapa produkt med namn och pris.
         {
@@ -29,14 +29,16 @@ namespace MyLocalStore
         // Metod för att konvertera priset till en annan valuta
         public decimal GetPriceInCurrency(string currency)
         {
-            switch (currency.ToUpper())
+            bool choise = true;
+
+            switch (currency)
             {
-                case "USD":
-                    return Price * USDConversionRate; // Omvandlar pris till dollar
-                case "EUR":
-                    return Price * EURConversionRate; // Omvandlar pris till euro
+                case "1":
+                    return Price * USDConversionRate; // Omvandlar pris till USD
+                case "2":
+                    return Price * GBPConversionRate; // Omvandlar pris till GBP
                 default:
-                    return Price; // Returnerar priset i SEK om ingen annan valuta väljs
+                    return Price; // Returnerar priset i SEK 
             }
         }
 
@@ -51,8 +53,8 @@ namespace MyLocalStore
             };
 
             // Låt användaren välja valuta
-            Console.WriteLine("Välj valuta att visa priser i (SEK, USD, EUR): ");
-            string selectedCurrency = Console.ReadLine().ToUpper();
+            Console.WriteLine("\nVälj i vilken valuta du vill se varorna:\n 1.USD\n 2.GBP\n\nEller valfri knapp för standard valute (SEK) ");
+            string selectedCurrency = Console.ReadLine();
 
             bool shopping = true; // Håller koll på om kunden handlar.
 
@@ -64,17 +66,17 @@ namespace MyLocalStore
                 Console.ResetColor();
                 Console.WriteLine("Tillgängliga produkter:\n");
 
-                for (int i = 0; i < products.Count; i++)  // Loopar över tillgängliga produkter och skriver ut dem.
+                for (int i = 0; i < products.Count; i++)  // Loopar över tillgängliga produkter och skriver ut dom.
                 {
                     decimal priceInSelectedCurrency = products[i].GetPriceInCurrency(selectedCurrency);
                     string currencySymbol;
 
                     switch (selectedCurrency)
                     {
-                        case "USD":
+                        case "1":
                             currencySymbol = "$";
                             break;
-                        case "EUR":
+                        case "2":
                             currencySymbol = "£";
                             break;
                         default:
